@@ -94,14 +94,16 @@ export async function uploadImage(
     return uploadImage(filePath, purpose, true)
   }
   if (data.code !== 0) throw new APIError(data.code, data.msg)
-  if (purpose !== 'checkin' && data.data.auditStatus === 'pending') {
+  if (data.data.auditStatus === 'pending') {
     for (let attempt = 0; attempt < 40; attempt += 1) {
       await new Promise(resolve => setTimeout(resolve, 750))
       const status = await request<{ auditStatus: string; file?: FileInfo }>(`/files/${data.data.id}/status`)
       if (status.auditStatus === 'approved' && status.file) return status.file
-      if (status.auditStatus === 'rejected') throw new APIError(102003, '图片未通过内容安全审核')
+      if (status.auditStatus === 'rejected') {
+        throw new APIError(102009, '所上传图片含有违规信息，请更换后重试')
+      }
     }
-    throw new APIError(102001, '图片审核仍在进行，请稍后再试')
+    throw new APIError(102012, '图片正在进行内容安全检测，请稍后再试')
   }
   return data.data
 }
