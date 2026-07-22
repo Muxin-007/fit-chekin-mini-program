@@ -1,0 +1,16 @@
+# mini-program
+dist/
+deploy_versions/
+.temp/
+.rn_temp/
+node_modules/
+.DS_Store
+.swc
+*.local
+.env.*
+
+# Private Mini Program credentials must remain local.
+keys/
+
+# macOS metadata
+.DS_Store

@@ -1,0 +1,29 @@
+.groups-intro { display: flex; align-items: flex-end; justify-content: space-between; padding: 16px 2px 34px; }
+.eyebrow { display: block; margin-bottom: 12px; color: var(--muted); font-size: 20px; font-weight: 900; letter-spacing: 3px; }
+.groups-title { white-space: pre-line; font-size: 54px; font-weight: 900; line-height: 1.08; letter-spacing: -3px; }
+.create-fab { display: flex; width: 94px; height: 94px; align-items: center; justify-content: center; border-radius: 50%; color: var(--ink); background: var(--lime); box-shadow: 0 7px 0 var(--ink); font-size: 52px; font-weight: 500; }
+.groups-list { display: flex; flex-direction: column; gap: 22px; }
+.group-row { overflow: hidden; padding: 26px; }
+.group-row.tone-1 { border-top: 8px solid var(--lime); }
+.group-row.tone-2 { border-top: 8px solid var(--orange); }
+.group-row-head { display: flex; align-items: center; gap: 18px; }
+.group-avatar { width: 94px; height: 94px; border-radius: 26px; }
+.group-row-copy { min-width: 0; flex: 1; }
+.group-name-line { display: flex; align-items: center; gap: 10px; }
+.group-row-name { overflow: hidden; font-size: 31px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.admin-tag, .pending-tag { flex: 0 0 auto; padding: 6px 10px; border-radius: 8px; background: #e9e7df; font-size: 18px; font-weight: 800; }
+.pending-tag { color: #a84a22; background: #fff0e8; }
+.group-row-desc { display: block; overflow: hidden; margin-top: 8px; color: var(--muted); font-size: 22px; text-overflow: ellipsis; white-space: nowrap; }
+.arrow { font-size: 34px; font-weight: 900; }
+.group-metrics { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 22px; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line); }
+.metric-strong { display: block; font-size: 30px; font-weight: 900; }
+.metric-label { display: block; color: var(--muted); font-size: 18px; }
+.group-progress-large { height: 12px; overflow: hidden; border-radius: 20px; background: #eceae4; }
+.group-progress-fill { height: 100%; border-radius: inherit; background: var(--ink); }
+.self-done, .self-waiting { font-size: 20px; font-weight: 800; }
+.self-done { color: #648200; }
+.self-waiting { color: #c5572f; }
+.groups-empty { display: flex; min-height: 650px; flex-direction: column; align-items: center; justify-content: center; padding: 60px; text-align: center; }
+.empty-illustration { font-size: 110px; }
+.empty-title { margin-top: 18px; font-size: 36px; font-weight: 900; }
+.empty-desc { margin: 16px 0 40px; color: var(--muted); font-size: 25px; line-height: 1.7; }

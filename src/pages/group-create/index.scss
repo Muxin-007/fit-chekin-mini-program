@@ -1,0 +1,21 @@
+.create-heading { padding: 14px 2px 34px; }
+.create-eyebrow { display: block; margin-bottom: 12px; color: var(--orange); font-size: 20px; font-weight: 900; letter-spacing: 4px; }
+.create-title { white-space: pre-line; font-size: 52px; font-weight: 900; line-height: 1.08; letter-spacing: -3px; }
+.avatar-picker { position: relative; width: 190px; height: 190px; margin: 0 auto 30px; }
+.avatar-picker image, .avatar-placeholder { width: 100%; height: 100%; overflow: hidden; border-radius: 48px; }
+.avatar-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); background: #e7e5dd; }
+.avatar-placeholder text:first-child { color: var(--ink); font-size: 60px; }
+.avatar-placeholder text:last-child { font-size: 21px; }
+.avatar-tip { position: absolute; right: -22px; bottom: 5px; padding: 9px 13px; border-radius: 99px; color: var(--ink); background: var(--lime); font-size: 18px; font-weight: 800; }
+.create-form { padding: 28px; }
+.textarea.short { min-height: 135px; }
+.rules-card { overflow: hidden; }
+.rule-row { display: flex; min-height: 125px; align-items: center; justify-content: space-between; gap: 18px; padding: 20px 24px; border-bottom: 1px solid var(--line); }
+.rule-row:last-child { border-bottom: 0; }
+.rule-name { display: block; font-size: 27px; font-weight: 800; }
+.rule-desc { display: block; margin-top: 6px; color: var(--muted); font-size: 19px; }
+.stepper { display: flex; align-items: center; gap: 17px; }
+.stepper text:first-child, .stepper text:last-child { display: flex; width: 52px; height: 52px; align-items: center; justify-content: center; border-radius: 15px; background: #eceae3; font-size: 30px; font-weight: 800; }
+.stepper text:nth-child(2) { min-width: 58px; font-size: 25px; font-weight: 900; text-align: center; }
+.compact-input { width: 130px; padding: 16px; border-radius: 15px; background: #efede6; font-size: 25px; font-weight: 800; text-align: center; }
+.create-submit { margin-top: 44px; }

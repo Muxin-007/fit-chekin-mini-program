@@ -1,0 +1,58 @@
+.group-hero { padding: 32px; border-radius: 38px; color: #fff; background: var(--ink); box-shadow: 0 15px 0 var(--lime); }
+.hero-top { display: flex; align-items: center; gap: 20px; }
+.hero-avatar { width: 112px; height: 112px; border: 5px solid rgba(255,255,255,.18); border-radius: 30px; }
+.hero-copy { min-width: 0; flex: 1; }
+.hero-name { display: block; overflow: hidden; font-size: 40px; font-weight: 900; text-overflow: ellipsis; white-space: nowrap; }
+.hero-meta { display: block; margin-top: 7px; font-size: 21px; opacity: .55; }
+.hero-announcement { display: block; margin-top: 26px; padding: 20px; border-radius: 18px; background: rgba(255,255,255,.07); font-size: 23px; line-height: 1.6; }
+.hero-progress { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 26px; }
+.progress-number { color: var(--lime); font-size: 62px; font-weight: 900; line-height: 1; }
+.progress-total { font-size: 24px; font-weight: 700; opacity: .7; }
+.progress-status { font-size: 22px; font-weight: 800; }
+.hero-track { height: 13px; overflow: hidden; margin-top: 16px; border-radius: 10px; background: rgba(255,255,255,.15); }
+.hero-track view { height: 100%; border-radius: inherit; background: var(--lime); }
+.hero-actions { display: flex; gap: 14px; margin-top: 26px; }
+.invite-button, .checkin-button { min-height: 76px; flex: 1; border-radius: 18px; font-size: 25px; font-weight: 900; }
+.invite-button { color: var(--ink); background: #fff; }
+.checkin-button { color: var(--ink); background: var(--lime); }
+.member-list, .checked-list { display: flex; flex-direction: column; gap: 16px; }
+.member-list { overflow: hidden; gap: 0; }
+.member-row { display: flex; min-height: 108px; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+.member-row:last-child { border-bottom: 0; }
+.member-avatar { width: 70px; height: 70px; }
+.grayscale { filter: grayscale(1); opacity: .65; }
+.member-name { font-size: 26px; font-weight: 800; }
+.member-copy { min-width: 0; flex: 1; }
+.unchecked-status, .checked-time { display: block; margin-top: 4px; color: var(--muted); font-size: 19px; }
+.review-actions { display: flex; gap: 12px; margin-left: auto; }
+.review-actions text { padding: 12px 16px; border-radius: 12px; background: #eee; font-size: 20px; font-weight: 800; }
+.review-actions text:last-child { background: var(--lime); }
+.checked-card { overflow: hidden; }
+.checked-card-head { display: flex; align-items: center; gap: 15px; padding: 20px; }
+.checked-copy { min-width: 0; flex: 1; }
+.more-action { color: #adaca5; font-size: 18px; }
+.workout-line { display: flex; min-height: 125px; align-items: center; gap: 18px; padding: 20px 22px; color: #fff; background: #27282f; }
+.workout-line > view { flex: 1; }
+.workout-type { display: block; font-size: 29px; font-weight: 900; }
+.workout-duration { display: block; margin-top: 4px; color: var(--lime); font-size: 22px; font-weight: 800; }
+.workout-line image { width: 106px; height: 86px; border-radius: 15px; }
+.workout-arrow { font-size: 34px; font-weight: 900; }
+.unchecked-heading { display: flex; align-items: center; justify-content: space-between; }
+.remind-all { margin-top: 26px; color: #b04c28; font-size: 22px; font-weight: 900; }
+.remind-one { flex: 0 0 auto; padding: 12px 15px; border-radius: 12px; background: #fff1ea; color: #aa4926; font-size: 19px; font-weight: 900; }
+.remove-one { flex: 0 0 auto; color: #aaa; font-size: 18px; }
+.settings-button { margin-top: 38px; }
+.exit-button { margin-top: 18px; }
+.pending-page { display: flex; min-height: 85vh; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.pending-icon { font-size: 90px; }
+.pending-title { margin-top: 20px; font-size: 39px; font-weight: 900; }
+.pending-copy { max-width: 540px; margin-top: 15px; color: var(--muted); font-size: 25px; line-height: 1.7; }
+.invite-overlay { position: fixed; z-index: 100; inset: 0; display: flex; align-items: flex-end; background: rgba(10,10,12,.65); backdrop-filter: blur(8px); }
+.invite-sheet { position: relative; width: 100%; padding: 42px 36px calc(38px + env(safe-area-inset-bottom)); border-radius: 40px 40px 0 0; background: var(--paper); text-align: center; }
+.sheet-close { position: absolute; top: 24px; right: 30px; font-size: 46px; }
+.sheet-eyebrow { display: block; color: var(--orange); font-size: 19px; font-weight: 900; letter-spacing: 3px; }
+.sheet-title { display: block; margin-top: 10px; white-space: pre-line; font-size: 44px; font-weight: 900; line-height: 1.12; letter-spacing: -2px; }
+.qr-code { width: 330px; height: 330px; margin: 28px auto 10px; border: 16px solid #fff; border-radius: 24px; }
+.invite-code { display: block; color: var(--muted); font-size: 21px; }
+.share-button { margin-top: 28px; }
+.sheet-tip { display: block; margin-top: 24px; color: var(--muted); font-size: 20px; }

@@ -1,0 +1,156 @@
+:root,
+page {
+  --ink: #17181c;
+  --muted: #74757d;
+  --paper: #f5f4ef;
+  --card: #ffffff;
+  --lime: #d7ff52;
+  --lime-deep: #b9e52d;
+  --orange: #ff7a45;
+  --line: #e8e6df;
+}
+
+page,
+body {
+  min-height: 100%;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+}
+
+.taro-tabbar__tabbar-item-icon {
+  display: none !important;
+}
+
+.weui-tabbar__item > span {
+  display: none !important;
+}
+
+.weui-tabbar__item:focus {
+  outline: none;
+}
+
+view, text, input, textarea, button, image, picker, switch {
+  box-sizing: border-box;
+}
+
+button {
+  margin: 0;
+  line-height: 1.2;
+  touch-action: manipulation;
+
+  &::after { border: 0; }
+}
+
+.page {
+  min-height: 100vh;
+  padding: 28px 28px calc(48px + env(safe-area-inset-bottom));
+}
+
+.section-title {
+  margin: 42px 0 20px;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid rgba(23, 24, 28, .06);
+  border-radius: 28px;
+  box-shadow: 0 12px 32px rgba(23, 24, 28, .055);
+}
+
+.primary-button,
+.secondary-button,
+.danger-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92px;
+  padding: 0 30px;
+  border-radius: 24px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.primary-button {
+  color: var(--ink);
+  background: var(--lime);
+  box-shadow: 0 10px 0 #17181c;
+}
+
+.primary-button:active {
+  transform: translateY(5px);
+  box-shadow: 0 5px 0 #17181c;
+}
+
+.secondary-button {
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+}
+
+.danger-button {
+  color: #d53b2e;
+  background: #fff0ec;
+}
+
+.field {
+  margin-bottom: 26px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 12px;
+  color: #3d3e44;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.input,
+.textarea,
+.picker-field {
+  width: 100%;
+  min-height: 88px;
+  padding: 24px;
+  background: #fff;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  font-size: 28px;
+}
+
+.textarea {
+  min-height: 180px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.empty {
+  padding: 60px 30px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.avatar {
+  width: 82px;
+  height: 82px;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #eceae2;
+}
+
+.avatar-fallback {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: #24262d;
+  font-size: 30px;
+  font-weight: 800;
+}
