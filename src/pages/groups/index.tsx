@@ -51,14 +51,14 @@ export default function Groups() {
                 onClick={() => Taro.navigateTo({ url: `/pages/group-detail/index?id=${group.id}` })}
               >
                 <View className='group-row-head'>
-                  <Avatar file={group.avatar} name={group.name} className='group-avatar' />
+                  <Avatar name={group.name} className='group-avatar' />
                   <View className='group-row-copy'>
                     <View className='group-name-line'>
                       <Text className='group-row-name'>{group.name}</Text>
                       {group.role === 'admin' && <Text className='admin-tag'>管理员</Text>}
                       {group.membershipStatus === 'pending' && <Text className='pending-tag'>待审核</Text>}
                     </View>
-                    <Text className='group-row-desc'>{group.description || '一起练，比一个人更难鸽。'}</Text>
+                    <Text className='group-row-desc'>仅共享今日是否完成，不共享个人运动详情</Text>
                   </View>
                   <Text className='arrow'>→</Text>
                 </View>

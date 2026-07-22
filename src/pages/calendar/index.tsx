@@ -95,7 +95,7 @@ export default function CalendarPage() {
             <View>
               <Text className='record-date'>{selected.date}</Text>
               <Text className='record-title'>{exerciseLabels[selected.exerciseType]} · {selected.durationMinutes} 分钟</Text>
-              <Text className='record-copy'>{selected.mood || selected.content || '今天认真练过了。'}</Text>
+              <Text className='record-copy'>个人运动记录 · 仅自己可见</Text>
             </View>
             <Text className='record-arrow'>→</Text>
           </View>

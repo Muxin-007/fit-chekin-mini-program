@@ -75,7 +75,7 @@ export async function request<T>(
 
 export async function uploadImage(
   filePath: string,
-  purpose: 'avatar' | 'group_avatar' | 'checkin',
+  purpose: 'avatar' | 'checkin',
   retried = false
 ) {
   let token = Taro.getStorageSync(TOKEN_KEY) as string

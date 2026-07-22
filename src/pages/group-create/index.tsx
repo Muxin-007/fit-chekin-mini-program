@@ -1,16 +1,15 @@
-import { Button, Image, Input, Switch, Text, Textarea, View } from '@tarojs/components'
+import { Button, Input, Switch, Text, View } from '@tarojs/components'
 import Taro, { useLoad } from '@tarojs/taro'
 import { useState } from 'react'
-import { request, showError, uploadImage } from '../../services/api'
+import { request, showError } from '../../services/api'
 import { FileInfo, GroupDetail } from '../../types'
 import './index.scss'
 
+const groupNames = ['日常运动小组', '跑步打卡小组', '健身训练小组', '步行打卡小组', '综合运动小组']
+
 export default function GroupCreatePage() {
   const [id, setId] = useState('')
-  const [name, setName] = useState('')
-  const [avatar, setAvatar] = useState<FileInfo>()
-  const [description, setDescription] = useState('')
-  const [announcement, setAnnouncement] = useState('')
+  const [name, setName] = useState(groupNames[0])
   const [weeklyTarget, setWeeklyTarget] = useState(3)
   const [reminderTime, setReminderTime] = useState('20:00')
   const [requireApproval, setRequireApproval] = useState(false)
@@ -34,9 +33,6 @@ export default function GroupCreatePage() {
     try {
       const group = await request<GroupDetail>(`/groups/${options.id}`)
       setName(group.name)
-      setAvatar(group.avatar)
-      setDescription(group.description)
-      setAnnouncement(group.announcement)
       setWeeklyTarget(group.weeklyTarget)
       setReminderTime(group.reminderTime)
       setRequireApproval(group.requireApproval)
@@ -46,24 +42,7 @@ export default function GroupCreatePage() {
     }
   })
 
-  const chooseAvatar = async () => {
-    try {
-      const result = await Taro.chooseMedia({ count: 1, mediaType: ['image'], sourceType: ['album', 'camera'], sizeType: ['compressed'] })
-      Taro.showLoading({ title: '上传并审核中' })
-      setAvatar(await uploadImage(result.tempFiles[0].tempFilePath, 'group_avatar'))
-    } catch (error) {
-      const err = error as { errMsg?: string }
-      if (!err.errMsg?.includes('cancel')) showError(error)
-    } finally {
-      Taro.hideLoading()
-    }
-  }
-
   const save = async () => {
-    if (!name.trim()) {
-      Taro.showToast({ title: '给小组起个名字', icon: 'none' })
-      return
-    }
     if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(reminderTime)) {
       Taro.showToast({ title: '提醒时间格式应为 20:00', icon: 'none' })
       return
@@ -71,10 +50,7 @@ export default function GroupCreatePage() {
     setSaving(true)
     try {
       const payload = {
-        name: name.trim(),
-        avatarFileId: avatar?.id || '',
-        description: description.trim(),
-        announcement: announcement.trim(),
+        name,
         weeklyTarget,
         reminderTime,
         requireApproval,
@@ -106,28 +82,24 @@ export default function GroupCreatePage() {
     <View className='page group-create-page'>
       <View className='create-heading'>
         <Text className='create-eyebrow'>{id ? 'TUNE THE CLUB' : 'START A CLUB'}</Text>
-        <Text className='create-title'>{id ? '把规则说清楚，\n大家更难装忘。' : '找几个朋友，\n一起把鸽子关起来。'}</Text>
-      </View>
-
-      <View className='avatar-picker' onClick={chooseAvatar}>
-        {avatar
-          ? <Image src={avatar.url} mode='aspectFill' />
-          : <View className='avatar-placeholder'><Text>＋</Text><Text>小组头像</Text></View>}
-        <Text className='avatar-tip'>点击更换</Text>
+        <Text className='create-title'>{id ? '调整打卡规则，\n继续一起坚持。' : '找几个朋友，\n一起把鸽子关起来。'}</Text>
       </View>
 
       <View className='create-form card'>
         <View className='field'>
-          <Text className='field-label'>小组名称</Text>
-          <Input className='input' value={name} maxlength={30} placeholder='比如：夏天之前瘦十斤' onInput={event => setName(event.detail.value)} />
-        </View>
-        <View className='field'>
-          <Text className='field-label'>小组简介</Text>
-          <Textarea className='textarea short' value={description} maxlength={200} placeholder='我们为什么聚在这里？' onInput={event => setDescription(event.detail.value)} />
-        </View>
-        <View className='field'>
-          <Text className='field-label'>小组公告</Text>
-          <Textarea className='textarea short' value={announcement} maxlength={300} placeholder='规则、约定或一句狠话' onInput={event => setAnnouncement(event.detail.value)} />
+          <Text className='field-label'>选择小组类型</Text>
+          <Text className='field-tip'>名称由平台预设，成员不能发布自定义文字。</Text>
+          <View className='group-name-options'>
+            {groupNames.map(item => (
+              <Text
+                key={item}
+                className={`group-name-option ${name === item ? 'active' : ''}`}
+                onClick={() => setName(item)}
+              >
+                {item}
+              </Text>
+            ))}
+          </View>
         </View>
       </View>
 

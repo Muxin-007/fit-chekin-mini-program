@@ -31,10 +31,3 @@
 .progress-track { height: 10px; overflow: hidden; margin-top: 20px; border-radius: 10px; background: #eeece6; }
 .progress-value { height: 100%; border-radius: inherit; background: var(--ink); }
 .empty-link { display: block; margin-top: 10px; color: var(--ink); font-weight: 800; }
-.activity-list { overflow: hidden; }
-.activity-item { display: flex; align-items: center; gap: 18px; min-height: 118px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
-.activity-item:last-child { border-bottom: 0; }
-.activity-avatar { width: 72px; height: 72px; }
-.activity-copy { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 6px; }
-.activity-name { font-size: 27px; font-weight: 800; }
-.activity-desc, .activity-time { color: var(--muted); font-size: 22px; }

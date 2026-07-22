@@ -1,10 +1,10 @@
 import { Button, Image, Text, View } from '@tarojs/components'
 import Taro, { useLoad, usePullDownRefresh, useShareAppMessage } from '@tarojs/taro'
 import { useCallback, useState } from 'react'
+import shareCard from '../../assets/share-card.jpg'
 import Avatar from '../../components/Avatar'
 import { request, showError } from '../../services/api'
-import { FileInfo, GroupDetail, MemberStatus, User } from '../../types'
-import { exerciseLabels, formatTime } from '../../utils/format'
+import { FileInfo, GroupDetail, MemberStatus } from '../../types'
 import './index.scss'
 
 interface InvitationState { code: string; qrCode: FileInfo; expiresAt?: number }
@@ -12,19 +12,14 @@ interface InvitationState { code: string; qrCode: FileInfo; expiresAt?: number }
 export default function GroupDetailPage() {
   const [id, setId] = useState('')
   const [group, setGroup] = useState<GroupDetail>()
-  const [currentUser, setCurrentUser] = useState<User>()
   const [invitation, setInvitation] = useState<InvitationState>()
   const [showInvite, setShowInvite] = useState(false)
 
   const load = useCallback(async (groupId = id) => {
     if (!groupId) return
     try {
-      const [detail, profile] = await Promise.all([
-        request<GroupDetail>(`/groups/${groupId}`),
-        request<{ user: User }>('/profile')
-      ])
+      const detail = await request<GroupDetail>(`/groups/${groupId}`)
       setGroup(detail)
-      setCurrentUser(profile.user)
       Taro.setNavigationBarTitle({ title: detail.name })
       const stored = Taro.getStorageSync(`group-invitation-${groupId}`) as InvitationState
       if (stored?.code) {
@@ -57,9 +52,9 @@ export default function GroupDetailPage() {
   usePullDownRefresh(() => { void load() })
 
   useShareAppMessage(() => ({
-    title: `${currentUser?.nickname || '好友'}邀请你加入「${group?.name || '健身小组'}」`,
+    title: '邀请你加入运动打卡小组',
     path: `/pages/invite/index?code=${invitation?.code || ''}`,
-    imageUrl: invitation?.qrCode?.url
+    imageUrl: shareCard
   }))
 
   const createInvitation = async () => {
@@ -88,16 +83,16 @@ export default function GroupDetailPage() {
     }
   }
 
-  const remind = async (targetUserId?: string) => {
+  const remind = async (targetMemberId?: string) => {
     if (!group) return
-    if (!targetUserId && !group.uncheckedMembers.some(member => member.userId !== currentUser?.id)) {
+    if (!targetMemberId && !group.uncheckedMembers.some(member => !member.isCurrent)) {
       Taro.showToast({ title: '没有其他需要提醒的成员', icon: 'none' })
       return
     }
     try {
       const result = await request<Array<{ status: string; reason?: string }> | null>('/reminders', {
         method: 'POST',
-        data: { groupId: group.id, targetUserId: targetUserId || '', allPending: !targetUserId }
+        data: { groupId: group.id, targetMemberId: targetMemberId || '', allPending: !targetMemberId }
       })
       const outcomes = result || []
       const sent = outcomes.filter(item => item.status === 'sent').length
@@ -118,28 +113,11 @@ export default function GroupDetailPage() {
   }
 
   const removeMember = async (member: MemberStatus) => {
-    const confirm = await Taro.showModal({ title: `移除 ${member.nickname}？`, content: '移除后，对方需要通过邀请重新加入。', confirmColor: '#d53b2e' })
+    const confirm = await Taro.showModal({ title: `移除 ${member.label}？`, content: '移除后，对方需要通过邀请重新加入。', confirmColor: '#d53b2e' })
     if (!confirm.confirm) return
     try {
       await request(`/groups/${id}/members/${member.memberId}`, { method: 'DELETE' })
       await load()
-    } catch (error) {
-      showError(error)
-    }
-  }
-
-  const report = async (checkinId: string) => {
-    const modal = await Taro.showModal({
-      title: '举报这条打卡',
-      content: '',
-      editable: true,
-      placeholderText: '请说明原因',
-      confirmText: '提交'
-    } as any) as unknown as { confirm: boolean; content?: string }
-    if (!modal.confirm || !modal.content?.trim()) return
-    try {
-      await request('/reports', { method: 'POST', data: { checkinId, reason: modal.content.trim() } })
-      Taro.showToast({ title: '举报已提交', icon: 'success' })
     } catch (error) {
       showError(error)
     }
@@ -177,13 +155,13 @@ export default function GroupDetailPage() {
     <View className='page group-detail-page'>
       <View className='group-hero'>
         <View className='hero-top'>
-          <Avatar file={group.avatar} name={group.name} className='hero-avatar' />
+          <Avatar name={group.name} className='hero-avatar' />
           <View className='hero-copy'>
             <Text className='hero-name'>{group.name}</Text>
             <Text className='hero-meta'>{group.memberCount} 位搭子 · 每周目标 {group.weeklyTarget} 天</Text>
           </View>
         </View>
-        <Text className='hero-announcement'>{group.announcement || group.description || '一起练，比一个人更难鸽。'}</Text>
+        <Text className='hero-announcement'>小组仅共享当天是否完成，不展示成员的运动详情、文字或照片。</Text>
         <View className='hero-progress'>
           <View>
             <Text className='progress-number'>{group.checkedCount}</Text>
@@ -210,8 +188,8 @@ export default function GroupDetailPage() {
           <View className='member-list card'>
             {group.pendingMembers.map(member => (
               <View className='member-row' key={member.memberId}>
-                <Avatar file={member.avatar} name={member.nickname} className='member-avatar' />
-                <Text className='member-name'>{member.nickname}</Text>
+                <Avatar name={member.label} className='member-avatar' />
+                <Text className='member-name'>{member.label}</Text>
                 <View className='review-actions'>
                   <Text onClick={() => void review(member.memberId, false)}>拒绝</Text>
                   <Text onClick={() => void review(member.memberId, true)}>通过</Text>
@@ -223,35 +201,16 @@ export default function GroupDetailPage() {
       )}
 
       <Text className='section-title'>今天没鸽 · {group.checkedMembers.length}</Text>
-      <View className='checked-list'>
+      <View className='member-list card'>
         {group.checkedMembers.length
           ? group.checkedMembers.map(member => (
-              <View className='checked-card card' key={member.memberId}>
-                <View className='checked-card-head'>
-                  <Avatar file={member.avatar} name={member.nickname} className='member-avatar' />
-                  <View className='checked-copy'>
-                    <Text className='member-name'>{member.nickname}</Text>
-                    <Text className='checked-time'>
-                      {member.auditPending ? '已完成 · 内容审核中' : `${formatTime(member.checkinAt)} 完成 · 连续 ${member.currentStreak} 天`}
-                    </Text>
-                  </View>
-                  {member.userId !== currentUser?.id && <Text className='more-action' onClick={() => member.checkinId && void report(member.checkinId)}>举报</Text>}
+              <View className='member-row' key={member.memberId}>
+                <Avatar name={member.label} className='member-avatar' />
+                <View className='member-copy'>
+                  <Text className='member-name'>{member.label}</Text>
+                  <Text className='checked-time'>今天已完成</Text>
                 </View>
-                <View
-                  className='workout-line'
-                  onClick={() => member.checkinId && Taro.navigateTo({ url: `/pages/checkin/index?id=${member.checkinId}&view=1` })}
-                >
-                  {member.auditPending
-                    ? <Text className='workout-duration'>审核通过后可查看打卡详情</Text>
-                    : <>
-                        <View>
-                          <Text className='workout-type'>{exerciseLabels[member.exerciseType || 'other']}</Text>
-                          <Text className='workout-duration'>{member.durationMinutes} 分钟</Text>
-                        </View>
-                        {member.image && <Image src={member.image.url} mode='aspectFill' />}
-                        <Text className='workout-arrow'>→</Text>
-                      </>}
-                </View>
+                <Text className='completion-mark'>✓</Text>
               </View>
             ))
           : <View className='empty card'>今天还没人打破沉默。</View>}
@@ -259,7 +218,7 @@ export default function GroupDetailPage() {
 
       <View className='unchecked-heading'>
         <Text className='section-title'>正在挣扎 · {group.uncheckedMembers.length}</Text>
-        {group.role === 'admin' && group.uncheckedMembers.some(member => member.userId !== currentUser?.id) && (
+        {group.role === 'admin' && group.uncheckedMembers.some(member => !member.isCurrent) && (
           <Text className='remind-all' onClick={() => void remind()}>提醒全部</Text>
         )}
       </View>
@@ -267,12 +226,12 @@ export default function GroupDetailPage() {
         {group.uncheckedMembers.length
           ? group.uncheckedMembers.map(member => (
               <View className='member-row' key={member.memberId}>
-                <Avatar file={member.avatar} name={member.nickname} className='member-avatar grayscale' />
+                <Avatar name={member.label} className='member-avatar grayscale' />
                 <View className='member-copy'>
-                  <Text className='member-name'>{member.nickname}</Text>
+                  <Text className='member-name'>{member.label}</Text>
                   <Text className='unchecked-status'>今天还没有完成打卡</Text>
                 </View>
-                {member.userId !== currentUser?.id && <Text className='remind-one' onClick={() => void remind(member.userId)}>戳一下</Text>}
+                {!member.isCurrent && <Text className='remind-one' onClick={() => void remind(member.memberId)}>戳一下</Text>}
                 {group.role === 'admin' && member.role !== 'admin' && <Text className='remove-one' onClick={() => void removeMember(member)}>移除</Text>}
               </View>
             ))
@@ -289,7 +248,7 @@ export default function GroupDetailPage() {
           <View className='invite-sheet' onClick={event => event.stopPropagation()}>
             <Text className='sheet-close' onClick={() => setShowInvite(false)}>×</Text>
             <Text className='sheet-eyebrow'>INVITE YOUR CREW</Text>
-            <Text className='sheet-title'>叫人来一起{'\n'}取消鸽王资格</Text>
+            <Text className='sheet-title'>加入运动打卡小组{'\n'}互相提醒完成</Text>
             <Image className='qr-code' src={invitation.qrCode.url} mode='aspectFit' showMenuByLongpress />
             <Text className='invite-code'>邀请码 · {invitation.code}</Text>
             <Button className='primary-button share-button' openType='share'>分享到微信群</Button>

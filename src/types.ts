@@ -4,7 +4,6 @@ export interface User {
   nickname: string
   avatar?: FileInfo
   reminderEnabled: boolean
-  weightPublic: boolean
   status: string
 }
 export interface Stats {
@@ -17,47 +16,26 @@ export interface Stats {
 export interface GroupSummary {
   id: string
   name: string
-  avatar?: FileInfo
-  description: string
   memberCount: number
   checkedCount: number
   currentChecked: boolean
   role: 'admin' | 'member'
   membershipStatus: 'active' | 'pending'
 }
-export interface Activity {
-  checkinId: string
-  userId: string
-  nickname: string
-  avatar?: FileInfo
-  exerciseType: string
-  durationMinutes: number
-  checkinAt: number
-}
 export interface HomeData {
   todayChecked: boolean
   stats: Stats
   groups: GroupSummary[]
-  activities: Activity[]
 }
 export interface MemberStatus {
   memberId: string
-  userId: string
-  nickname: string
-  avatar?: FileInfo
+  label: string
   role: string
   status: string
   checked: boolean
-  auditPending: boolean
-  checkinId?: string
-  checkinAt?: number
-  exerciseType?: string
-  durationMinutes?: number
-  image?: FileInfo
-  currentStreak: number
+  isCurrent: boolean
 }
 export interface GroupDetail extends GroupSummary {
-  announcement: string
   weeklyTarget: number
   reminderTime: string
   requireApproval: boolean
@@ -71,15 +49,9 @@ export interface Checkin {
   date: string
   exerciseType: string
   durationMinutes: number
-  content: string
-  calories?: number
-  weight?: number
-  weightPublic: boolean
-  mood: string
   auditStatus: string
   auditDetail?: string
   canManage: boolean
-  createdAt: number
   images: FileInfo[]
   imageAuditSummary?: Record<string, number>
   groupIds: string[]
@@ -91,7 +63,6 @@ export interface Invitation {
   expiresAt: number
   groupId: string
   groupName: string
-  groupAvatar?: FileInfo
   memberCount: number
   weeklyTarget: number
   requireApproval: boolean

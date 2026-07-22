@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react'
 import Avatar from '../../components/Avatar'
 import { request, showError } from '../../services/api'
 import { HomeData } from '../../types'
-import { exerciseLabels, formatTime } from '../../utils/format'
 import './index.scss'
 
 export default function Index() {
@@ -89,7 +88,7 @@ export default function Index() {
                   onClick={() => Taro.navigateTo({ url: `/pages/group-detail/index?id=${group.id}` })}
                 >
                   <View className='group-card-top'>
-                    <Avatar file={group.avatar} name={group.name} />
+                    <Avatar name={group.name} />
                     <Text className={`status-dot ${group.currentChecked ? 'done' : ''}`} />
                   </View>
                   <Text className='group-name'>{group.name}</Text>
@@ -107,28 +106,6 @@ export default function Index() {
         : <View className='empty card' onClick={() => Taro.navigateTo({ url: '/pages/group-create/index' })}>
             还没有监督你的搭子。<Text className='empty-link'>创建第一个小组 →</Text>
           </View>}
-
-      <Text className='section-title'>刚刚有人没鸽</Text>
-      <View className='activity-list card'>
-        {data?.activities.length
-          ? data.activities.map(activity => (
-              <View
-                className='activity-item'
-                key={activity.checkinId}
-                onClick={() => Taro.navigateTo({ url: `/pages/checkin/index?id=${activity.checkinId}&view=1` })}
-              >
-                <Avatar file={activity.avatar} name={activity.nickname} className='activity-avatar' />
-                <View className='activity-copy'>
-                  <Text className='activity-name'>{activity.nickname}</Text>
-                  <Text className='activity-desc'>
-                    {exerciseLabels[activity.exerciseType]} · {activity.durationMinutes} 分钟
-                  </Text>
-                </View>
-                <Text className='activity-time'>{formatTime(activity.checkinAt)}</Text>
-              </View>
-            ))
-          : <View className='empty'>今天还很安静，你来打破僵局吧。</View>}
-      </View>
     </View>
   )
 }

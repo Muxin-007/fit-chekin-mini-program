@@ -54,9 +54,9 @@ export default function ProfilePage() {
     }
   }
 
-  const updateSetting = async (key: 'reminderEnabled' | 'weightPublic', value: boolean) => {
+  const updateReminder = async (value: boolean) => {
     try {
-      if (key === 'reminderEnabled' && value) {
+      if (value) {
         const config = await request<Record<string, string>>('/config')
         const templateId = config.reminderTemplateId
         if (templateId) {
@@ -68,7 +68,7 @@ export default function ProfilePage() {
           if (result[templateId] !== 'accept') value = false
         }
       }
-      await request('/profile/settings', { method: 'PUT', data: { [key]: value } })
+      await request('/profile/settings', { method: 'PUT', data: { reminderEnabled: value } })
       await load()
     } catch (error) {
       showError(error)
@@ -121,15 +121,7 @@ export default function ProfilePage() {
           <Switch
             checked={data?.user.reminderEnabled}
             color='#17181c'
-            onChange={event => void updateSetting('reminderEnabled', event.detail.value)}
-          />
-        </View>
-        <View className='setting-row'>
-          <View><Text className='setting-name'>体重默认公开</Text><Text className='setting-desc'>默认关闭，每次打卡仍可单独调整</Text></View>
-          <Switch
-            checked={data?.user.weightPublic}
-            color='#17181c'
-            onChange={event => void updateSetting('weightPublic', event.detail.value)}
+            onChange={event => void updateReminder(event.detail.value)}
           />
         </View>
       </View>

@@ -7,10 +7,8 @@
 .exercise-chip { padding: 18px 24px; border: 2px solid #dfddd5; border-radius: 99px; background: #fff; font-size: 24px; font-weight: 700; }
 .exercise-chip.active { border-color: var(--ink); background: var(--lime); box-shadow: 0 5px 0 var(--ink); transform: translateY(-3px); }
 .checkin-form { padding: 28px; }
-.two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.weight-row { display: flex; align-items: flex-end; gap: 20px; margin-bottom: 0; }
-.weight-input { flex: 1; }
-.privacy-switch { display: flex; min-width: 180px; min-height: 88px; flex-direction: column; align-items: flex-end; justify-content: center; }
+.readonly-date { padding: 20px; border-radius: 16px; color: var(--muted); background: #efede6; font-size: 24px; font-weight: 800; }
+.privacy-copy { display: block; margin: -18px 0 20px; color: var(--muted); font-size: 21px; line-height: 1.55; }
 .image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
 .image-item, .image-add { position: relative; height: 205px; overflow: hidden; border-radius: 22px; }
 .image-item image { width: 100%; height: 100%; }
@@ -28,10 +26,9 @@
 .save-checkin { margin-top: 44px; }
 .checkin-read-hero { display: flex; min-height: 360px; flex-direction: column; align-items: center; justify-content: center; border-radius: 38px; color: #fff; background: var(--ink); }
 .read-emoji { font-size: 90px; }
+.read-date { margin-top: 12px; color: rgba(255,255,255,.6); font-size: 22px; }
 .read-type { margin-top: 18px; font-size: 44px; font-weight: 900; }
 .read-duration { margin-top: 5px; color: var(--lime); font-size: 28px; font-weight: 800; }
 .read-image { width: 100%; height: 540px; margin-top: 24px; border-radius: 30px; }
-.read-copy { margin-top: 24px; padding: 30px; }
-.read-mood { display: block; font-size: 31px; font-weight: 900; }
-.read-content { display: block; margin-top: 16px; color: var(--muted); font-size: 26px; line-height: 1.7; }
+.privacy-note { margin-top: 24px; padding: 26px; color: var(--muted); font-size: 23px; line-height: 1.6; }
 .delete-checkin { margin-top: 30px; }

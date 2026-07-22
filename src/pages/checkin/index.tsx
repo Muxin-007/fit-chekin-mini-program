@@ -1,4 +1,4 @@
-import { Button, Image, Input, Switch, Text, Textarea, View } from '@tarojs/components'
+import { Button, Image, Input, Text, View } from '@tarojs/components'
 import Taro, { useLoad } from '@tarojs/taro'
 import { useState } from 'react'
 import { request, showError, uploadImage } from '../../services/api'
@@ -11,11 +11,7 @@ const defaultExerciseTypes = Object.entries(exerciseLabels)
 export default function CheckinPage() {
   const [exerciseType, setExerciseType] = useState('strength')
   const [duration, setDuration] = useState('30')
-  const [content, setContent] = useState('')
-  const [calories, setCalories] = useState('')
-  const [weight, setWeight] = useState('')
-  const [weightPublic, setWeightPublic] = useState(false)
-  const [mood, setMood] = useState('')
+  const [checkinDate, setCheckinDate] = useState('')
   const [groups, setGroups] = useState<GroupSummary[]>([])
   const [selectedGroups, setSelectedGroups] = useState<string[]>([])
   const [images, setImages] = useState<FileInfo[]>([])
@@ -49,13 +45,9 @@ export default function CheckinPage() {
         setAuditStatus(checkin.auditStatus)
         setAuditDetail(checkin.auditDetail || '')
         setCanManage(checkin.canManage)
+        setCheckinDate(checkin.date)
         setExerciseType(checkin.exerciseType)
         setDuration(String(checkin.durationMinutes))
-        setContent(checkin.content)
-        setCalories(checkin.calories == null ? '' : String(checkin.calories))
-        setWeight(checkin.weight == null ? '' : String(checkin.weight))
-        setWeightPublic(checkin.weightPublic)
-        setMood(checkin.mood)
         setImages(checkin.images)
         setSelectedGroups(checkin.groupIds)
       } else {
@@ -112,7 +104,7 @@ export default function CheckinPage() {
   const deleteCheckin = async () => {
     const confirmed = await Taro.showModal({
       title: '删除这条打卡？',
-      content: '文字、图片和小组动态都会永久删除，无法恢复。',
+      content: '运动记录和私密照片都会永久删除，无法恢复。',
       confirmText: '确认删除',
       confirmColor: '#d53b2e'
     })
@@ -139,11 +131,6 @@ export default function CheckinPage() {
         data: {
           exerciseType,
           durationMinutes: minutes,
-          content: content.trim(),
-          calories: calories ? Number(calories) : null,
-          weight: weight ? Number(weight) : null,
-          weightPublic,
-          mood: mood.trim(),
           groupIds: selectedGroups,
           imageFileIds: images.map(item => item.id)
         }
@@ -174,14 +161,12 @@ export default function CheckinPage() {
         )}
         <View className='checkin-read-hero'>
           <Text className='read-emoji'>MOVE</Text>
+          <Text className='read-date'>{checkinDate}</Text>
           <Text className='read-type'>{exerciseLabels[exerciseType]}</Text>
           <Text className='read-duration'>{duration} 分钟</Text>
         </View>
         {images.length > 0 && <Image className='read-image' src={images[0].url} mode='aspectFill' />}
-        <View className='read-copy card'>
-          <Text className='read-mood'>{mood || '今天也认真完成了。'}</Text>
-          <Text className='read-content'>{content || '这次打卡没有留下文字。'}</Text>
-        </View>
+        <View className='privacy-note card'>照片和运动详情仅自己可见，小组成员只能看到今天是否完成。</View>
         {canManage && <Button className='danger-button delete-checkin' onClick={deleteCheckin}>删除这条打卡</Button>}
       </View>
     )
@@ -191,12 +176,12 @@ export default function CheckinPage() {
     <View className='page checkin-page'>
       <View className='checkin-heading'>
         <Text className='checkin-eyebrow'>{existingId ? 'EDIT TODAY' : 'CLOCK IN'}</Text>
-        <Text className='checkin-title'>{existingId ? '今天还能练得\n更漂亮一点。' : '练了什么，\n大胆记下来。'}</Text>
+        <Text className='checkin-title'>{existingId ? '更新今天的\n运动记录。' : '记录运动，\n只给自己看。'}</Text>
       </View>
       {auditStatus === 'rejected' && (
         <View className='audit-warning card'>
           <Text className='audit-warning-title'>这条打卡未通过审核</Text>
-          <Text>{auditDetail || '请调整文字或图片后重新提交。'}</Text>
+          <Text>{auditDetail || '请调整私密照片后重新提交。'}</Text>
         </View>
       )}
 
@@ -214,43 +199,18 @@ export default function CheckinPage() {
       </View>
 
       <View className='checkin-form card'>
-        <View className='field two-column'>
-          <View>
-            <Text className='field-label'>运动时长（分钟）</Text>
-            <Input className='input' type='number' value={duration} onInput={event => setDuration(event.detail.value)} />
-          </View>
-          <View>
-            <Text className='field-label'>消耗热量（可选）</Text>
-            <Input className='input' type='number' value={calories} placeholder='kcal' onInput={event => setCalories(event.detail.value)} />
-          </View>
+        <View className='field'>
+          <Text className='field-label'>记录日期</Text>
+          <View className='readonly-date'>今天 · 自动记录</View>
         </View>
         <View className='field'>
-          <Text className='field-label'>今天练了什么</Text>
-          <Textarea
-            className='textarea'
-            value={content}
-            maxlength={500}
-            placeholder='比如：腿部训练 4 组，最后一组差点想跑…'
-            onInput={event => setContent(event.detail.value)}
-          />
-        </View>
-        <View className='field'>
-          <Text className='field-label'>一句话形容现在</Text>
-          <Input className='input' value={mood} maxlength={100} placeholder='累，但很值。' onInput={event => setMood(event.detail.value)} />
-        </View>
-        <View className='field weight-row'>
-          <View className='weight-input'>
-            <Text className='field-label'>当前体重（可选）</Text>
-            <Input className='input' type='digit' value={weight} placeholder='默认仅自己可见' onInput={event => setWeight(event.detail.value)} />
-          </View>
-          <View className='privacy-switch'>
-            <Text className='field-label'>对组员公开</Text>
-            <Switch checked={weightPublic} color='#17181c' onChange={event => setWeightPublic(event.detail.value)} />
-          </View>
+          <Text className='field-label'>运动时长（分钟）</Text>
+          <Input className='input' type='number' value={duration} onInput={event => setDuration(event.detail.value)} />
         </View>
       </View>
 
-      <Text className='section-title'>打卡照片</Text>
+      <Text className='section-title'>私密运动照片</Text>
+      <Text className='privacy-copy'>照片仅保存在你的个人记录中，不会向小组成员展示。</Text>
       <View className='image-grid'>
         {images.map(image => (
           <View className='image-item' key={image.id}>
@@ -261,7 +221,8 @@ export default function CheckinPage() {
         {images.length < 9 && <View className='image-add' onClick={chooseImages}><Text>＋</Text><Text>照片</Text></View>}
       </View>
 
-      <Text className='section-title'>发布到小组</Text>
+      <Text className='section-title'>同步完成状态</Text>
+      <Text className='privacy-copy'>小组只会看到“今天已完成”，不会看到运动类型、时长或照片。</Text>
       <View className='publish-groups card'>
         {groups.length
           ? groups.map(group => (

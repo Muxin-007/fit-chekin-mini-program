@@ -15,7 +15,7 @@
 .invite-button, .checkin-button { min-height: 76px; flex: 1; border-radius: 18px; font-size: 25px; font-weight: 900; }
 .invite-button { color: var(--ink); background: #fff; }
 .checkin-button { color: var(--ink); background: var(--lime); }
-.member-list, .checked-list { display: flex; flex-direction: column; gap: 16px; }
+.member-list { display: flex; flex-direction: column; }
 .member-list { overflow: hidden; gap: 0; }
 .member-row { display: flex; min-height: 108px; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--line); }
 .member-row:last-child { border-bottom: 0; }
@@ -27,16 +27,7 @@
 .review-actions { display: flex; gap: 12px; margin-left: auto; }
 .review-actions text { padding: 12px 16px; border-radius: 12px; background: #eee; font-size: 20px; font-weight: 800; }
 .review-actions text:last-child { background: var(--lime); }
-.checked-card { overflow: hidden; }
-.checked-card-head { display: flex; align-items: center; gap: 15px; padding: 20px; }
-.checked-copy { min-width: 0; flex: 1; }
-.more-action { color: #adaca5; font-size: 18px; }
-.workout-line { display: flex; min-height: 125px; align-items: center; gap: 18px; padding: 20px 22px; color: #fff; background: #27282f; }
-.workout-line > view { flex: 1; }
-.workout-type { display: block; font-size: 29px; font-weight: 900; }
-.workout-duration { display: block; margin-top: 4px; color: var(--lime); font-size: 22px; font-weight: 800; }
-.workout-line image { width: 106px; height: 86px; border-radius: 15px; }
-.workout-arrow { font-size: 34px; font-weight: 900; }
+.completion-mark { color: var(--lime-deep); font-size: 36px; font-weight: 900; }
 .unchecked-heading { display: flex; align-items: center; justify-content: space-between; }
 .remind-all { margin-top: 26px; color: #b04c28; font-size: 22px; font-weight: 900; }
 .remind-one { flex: 0 0 auto; padding: 12px 15px; border-radius: 12px; background: #fff1ea; color: #aa4926; font-size: 19px; font-weight: 900; }

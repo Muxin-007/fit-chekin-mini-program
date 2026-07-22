@@ -1,7 +1,6 @@
 import { Button, Text, View } from '@tarojs/components'
 import Taro, { useLoad } from '@tarojs/taro'
 import { useState } from 'react'
-import Avatar from '../../components/Avatar'
 import { request, showError } from '../../services/api'
 import { Invitation } from '../../types'
 import './index.scss'
@@ -35,7 +34,7 @@ export default function InvitePage() {
         data: { code }
       })
       if (result.status === 'pending') {
-        await Taro.showModal({ title: '申请已送达', content: '这个小组需要管理员审核，通过后就能看到大家的打卡进度。', showCancel: false })
+        await Taro.showModal({ title: '申请已送达', content: '这个小组需要管理员审核，通过后只能看到成员今天是否完成。', showCancel: false })
       } else {
         Taro.showToast({ title: '加入成功，开始互相监督', icon: 'success' })
       }
@@ -66,7 +65,7 @@ export default function InvitePage() {
         <Text className='poster-kicker'>YOU'RE INVITED</Text>
         <Text className='poster-title'>好友叫你来，{'\n'}一起少鸽一天。</Text>
         <View className='invite-group-card'>
-          <Avatar file={invitation.groupAvatar} name={invitation.groupName} className='invite-avatar' />
+          <View className='invite-avatar'>✓</View>
           <Text className='invite-group-name'>{invitation.groupName}</Text>
           <Text className='invite-members'>已经有 {invitation.memberCount} 人加入</Text>
           <View className='invite-rule'>
